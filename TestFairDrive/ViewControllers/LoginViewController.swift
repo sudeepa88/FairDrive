@@ -57,7 +57,7 @@ class LoginViewController: UIViewController {
         attributedString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: range)
         label.attributedText = attributedString
         label.textAlignment = .center
-        label.isUserInteractionEnabled = true // Enable interaction
+        label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -126,13 +126,13 @@ class LoginViewController: UIViewController {
     
     
     func navigateToHomeScreen() {
-        let homeVC = HomeViewController() // Create instance of HomeViewController
+        let homeVC = HomeViewController()
         navigationController?.pushViewController(homeVC, animated: true)
     }
     
     
     @objc func signUpLabelTapped() {
-        let signUpVC = ViewController() // Create instance of SignUpViewController
+        let signUpVC = ViewController() 
         navigationController?.pushViewController(signUpVC, animated: true)
     }
 }
