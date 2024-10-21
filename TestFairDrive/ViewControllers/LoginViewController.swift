@@ -119,7 +119,10 @@ class LoginViewController: UIViewController {
                 self.errorLabel.text = "Login Error: \(error.localizedDescription)"
             } else {
                 self.errorLabel.text = "Login successful!"
-                self.navigateToHomeScreen() // Navigate to HomeViewController
+                self.navigateToHomeScreen()
+                self.errorLabel.text = ""
+                self.emailTextField.text = ""
+                self.passwordTextField.text = ""
             }
         }
     }
@@ -127,6 +130,7 @@ class LoginViewController: UIViewController {
     
     func navigateToHomeScreen() {
         let homeVC = HomeViewController()
+        navigationItem.hidesBackButton = true
         navigationController?.pushViewController(homeVC, animated: true)
     }
     

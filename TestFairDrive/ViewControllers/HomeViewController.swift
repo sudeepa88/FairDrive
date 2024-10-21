@@ -14,7 +14,7 @@ import FirebaseCore
 import FirebaseAuth
 
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITextFieldDelegate {
     
     private let locationManager = CLLocationManager()
     var currentAddress: String = ""
@@ -35,6 +35,7 @@ class HomeViewController: UIViewController {
         location.placeholder = "Enter Location"
         location.textColor = .black
         location.borderStyle = .roundedRect
+        location.returnKeyType = .done
         return location
     }()
     
@@ -47,6 +48,7 @@ class HomeViewController: UIViewController {
         location.placeholder = "Enter Drop Location"
         location.textColor = .black
         location.borderStyle = .roundedRect
+        location.returnKeyType = .done
         return location
     }()
     
@@ -94,9 +96,16 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .white
         
         self.locationManager.delegate = self
+        userLocation.delegate = self
+        dropLocation.delegate = self
+        
+        
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
         self.locationManager.requestAlwaysAuthorization()
+        
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutAction))
         
         setUserLocationConstraints()
         setUserDropLocation()
@@ -173,8 +182,20 @@ class HomeViewController: UIViewController {
         ])
     }
     
+    
+    @objc func logoutAction() {
+        do {
+            try Auth.auth().signOut()
+            navigationController?.popToRootViewController(animated: true)
+            
+        } catch let signOutError as NSError {
+            print("Error Is Here --> ", signOutError)
+        }
+    }
+    
+    
     @objc func historyList() {
-        print("Hii")
+        //print("Hii")
         let historyListVC = HistotyListVC()
         navigationController?.pushViewController(historyListVC, animated: true)
     }
@@ -186,18 +207,18 @@ class HomeViewController: UIViewController {
     @objc func saveButtonTapped() {
         
         // Create the activity indicator (loader)
-            let loader = UIActivityIndicatorView(style: .large)
-            loader.center = self.view.center
-            loader.hidesWhenStopped = true
-            self.view.addSubview(loader)
-
+        let loader = UIActivityIndicatorView(style: .large)
+        loader.center = self.view.center
+        loader.hidesWhenStopped = true
+        self.view.addSubview(loader)
+        
         DispatchQueue.main.async {
             loader.color = UIColor.red
             loader.startAnimating()
         }
         
-            self.view.isUserInteractionEnabled = false
-
+        self.view.isUserInteractionEnabled = false
+        
         
         
         if let pickupLocation = userLocation.text,
@@ -220,17 +241,29 @@ class HomeViewController: UIViewController {
                     
                     
                     let alertController = UIAlertController(title: "Success", message: "Your Rides Have Been Saved!", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                        
+                        loader.stopAnimating()
+                        self.view.isUserInteractionEnabled = true
+
+                        
+                        let historyListVC = HistotyListVC()
+                        self.navigationController?.pushViewController(historyListVC, animated: true)
+                    }
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
-                    loader.stopAnimating()
-                    self.view.isUserInteractionEnabled = true
+//                    loader.stopAnimating()
+//                    self.view.isUserInteractionEnabled = true
                 }
             }
             
         }
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() 
+        return true
+    }
 }
 
 
@@ -241,7 +274,7 @@ extension HomeViewController: CLLocationManagerDelegate {
         geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
             if let placemark = placemarks?.first {
                 self.currentAddress = "\(placemark.thoroughfare ?? "") \(placemark.locality ?? "")"
-                print("my current Address is : ", self.currentAddress)
+                // print("my current Address is : ", self.currentAddress)
             }
         }
     }

@@ -81,7 +81,7 @@ extension HistotyListVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
-        var cellStyle = "\(cellTitles[indexPath.row].picupLoc)      -------------    \(cellTitles[indexPath.row].dropLoc)"
+        var cellStyle = "\(cellTitles[indexPath.row].picupLoc)      ----    \(cellTitles[indexPath.row].dropLoc)"
         
         cell.textLabel?.text = cellStyle
         
