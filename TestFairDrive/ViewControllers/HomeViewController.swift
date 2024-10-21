@@ -8,9 +8,18 @@
 import UIKit
 import MapKit
 import CoreLocation
+import FirebaseFirestoreInternal
+import FirebaseFirestore
+import FirebaseCore
+import FirebaseAuth
 
 
 class HomeViewController: UIViewController {
+    
+    private let locationManager = CLLocationManager()
+    var currentAddress: String = ""
+    
+    let db = Firestore.firestore()
     
     let mapView : MKMapView = {
         let map = MKMapView()
@@ -48,6 +57,7 @@ class HomeViewController: UIViewController {
         btnbtn.layer.cornerRadius = 20
         btnbtn.backgroundColor = .systemRed
         btnbtn.setTitle("Current Location", for: .normal)
+        btnbtn.addTarget(self, action: #selector(currentLocationAccess), for: .touchUpInside)
         btnbtn.setTitleColor(.white, for: .normal)
         return btnbtn
     }()
@@ -59,6 +69,7 @@ class HomeViewController: UIViewController {
         btnbtn.backgroundColor = .systemBlue
         btnbtn.setTitle("SAVE", for: .normal)
         btnbtn.setTitleColor(.white, for: .normal)
+        btnbtn.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return btnbtn
     }()
     
@@ -82,6 +93,10 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
         
+        self.locationManager.delegate = self
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.startUpdatingLocation()
+        self.locationManager.requestAlwaysAuthorization()
         
         setUserLocationConstraints()
         setUserDropLocation()
@@ -164,6 +179,71 @@ class HomeViewController: UIViewController {
         navigationController?.pushViewController(historyListVC, animated: true)
     }
     
+    @objc func currentLocationAccess() {
+        userLocation.text = currentAddress
+    }
+    
+    @objc func saveButtonTapped() {
+        
+        // Create the activity indicator (loader)
+            let loader = UIActivityIndicatorView(style: .large)
+            loader.center = self.view.center
+            loader.hidesWhenStopped = true
+            self.view.addSubview(loader)
+
+        DispatchQueue.main.async {
+            loader.color = UIColor.red
+            loader.startAnimating()
+        }
+        
+            self.view.isUserInteractionEnabled = false
+
+        
+        
+        if let pickupLocation = userLocation.text,
+           let dropLocation = dropLocation.text,
+           let userCurrentlyIn = Auth.auth().currentUser?.email {
+            
+            db.collection("history").addDocument(data: [
+                "userName" : userCurrentlyIn,
+                "userPickUp" : pickupLocation,
+                "userDropLocation" : dropLocation
+            ]) { (error) in
+                if let e = error {
+                    print("There was an issue saving data to firestore",e)
+                } else {
+                    print("Data Saved Successfully")
+                    
+                    
+                    self.userLocation.text = ""
+                    self.dropLocation.text = ""
+                    
+                    
+                    let alertController = UIAlertController(title: "Success", message: "Your Rides Have Been Saved!", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
+                    loader.stopAnimating()
+                    self.view.isUserInteractionEnabled = true
+                }
+            }
+            
+        }
+    }
+    
 }
 
 
+extension HomeViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.first else { return }
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+            if let placemark = placemarks?.first {
+                self.currentAddress = "\(placemark.thoroughfare ?? "") \(placemark.locality ?? "")"
+                print("my current Address is : ", self.currentAddress)
+            }
+        }
+    }
+    
+}

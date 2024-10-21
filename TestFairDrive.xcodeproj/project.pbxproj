@@ -16,6 +16,7 @@
 		D913C8932CC3D7050012126C /* Base in Resources */ = {isa = PBXBuildFile; fileRef = D913C8922CC3D7050012126C /* Base */; };
 		D913C89B2CC3DB380012126C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D913C89A2CC3DB380012126C /* GoogleService-Info.plist */; };
 		D96AB8B12CC54352000517F5 /* HistotyListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96AB8B02CC54352000517F5 /* HistotyListVC.swift */; };
+		D96AB8B62CC618D3000517F5 /* LocationDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96AB8B52CC618D3000517F5 /* LocationDetails.swift */; };
 		D9F432C92CC3EA7000AB2A8A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F432C82CC3EA7000AB2A8A /* LoginViewController.swift */; };
 		D9F432CB2CC41CA800AB2A8A /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F432CA2CC41CA800AB2A8A /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
@@ -34,6 +35,7 @@
 		D913C8942CC3D7050012126C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D913C89A2CC3DB380012126C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D96AB8B02CC54352000517F5 /* HistotyListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistotyListVC.swift; sourceTree = "<group>"; };
+		D96AB8B52CC618D3000517F5 /* LocationDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetails.swift; sourceTree = "<group>"; };
 		D9F432C82CC3EA7000AB2A8A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D9F432CA2CC41CA800AB2A8A /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,6 +82,7 @@
 		D913C8852CC3D7040012126C /* TestFairDrive */ = {
 			isa = PBXGroup;
 			children = (
+				D96AB8B22CC61873000517F5 /* Models */,
 				D913C8862CC3D7040012126C /* AppDelegate.swift */,
 				D913C8882CC3D7040012126C /* SceneDelegate.swift */,
 				D96AB8AF2CC4C732000517F5 /* ViewControllers */,
@@ -101,6 +104,14 @@
 				D96AB8B02CC54352000517F5 /* HistotyListVC.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D96AB8B22CC61873000517F5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D96AB8B52CC618D3000517F5 /* LocationDetails.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		D96DEAB1C66BF65B4383D8EC /* Frameworks */ = {
@@ -231,6 +242,7 @@
 				D9F432C92CC3EA7000AB2A8A /* LoginViewController.swift in Sources */,
 				D913C88B2CC3D7040012126C /* ViewController.swift in Sources */,
 				D96AB8B12CC54352000517F5 /* HistotyListVC.swift in Sources */,
+				D96AB8B62CC618D3000517F5 /* LocationDetails.swift in Sources */,
 				D913C8872CC3D7040012126C /* AppDelegate.swift in Sources */,
 				D913C8892CC3D7040012126C /* SceneDelegate.swift in Sources */,
 			);
